@@ -1,11 +1,12 @@
+// app.js
 import { useState } from 'react';
 import { fetchData } from './fetch-data';
-import { ImageModal } from './ImageModal';
 import { SearchBar } from './SearchBar';
 import { Loader } from './Loader';
 import { ErrorMassage } from './ErrorMassage';
 import { ImageGallery } from './ImageGallery';
-import { LoadMore } from './LoadMore';
+import { LoadMore } from './LoadMore'; // оновлений імпорт
+
 import css from './App.module.css';
 
 export const App = () => {
@@ -19,7 +20,6 @@ export const App = () => {
       setError(false);
       setLoading(true);
       const data = await fetchData(topic);
-      console.log(data);
       setImages(data);
     } catch (error) {
       console.error(error);
@@ -35,8 +35,9 @@ export const App = () => {
       {loading && <Loader />}
       {error && <ErrorMassage />}
       {images.length > 0 && <ImageGallery items={images} />}
-      <ImageModal />
-      <LoadMore />
+      <div className={css.centered}>
+        <LoadMore />
+      </div>
     </div>
   );
 };
