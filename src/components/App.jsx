@@ -5,14 +5,18 @@ import { SearchBar } from './SearchBar';
 import { Loader } from './Loader';
 import { ErrorMassage } from './ErrorMassage';
 import { ImageGallery } from './ImageGallery';
-import { LoadMore } from './LoadMore'; // оновлений імпорт
-
+import { LoadMore } from './LoadMore';
 import css from './App.module.css';
+
+let page = 1;
+let totalPages = 0;
 
 export const App = () => {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [error, setError] = useState(false);
+  const [newSearch, setNewSearch] = useState(true);
+  const perPage = 20;
 
   const handleSearch = async topic => {
     try {
