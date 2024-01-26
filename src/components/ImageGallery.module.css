@@ -1,0 +1,15 @@
+.gallery {
+  margin: 0 auto;
+}
+
+.galleryList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.galleryItem {
+  margin: 5px;
+  box-sizing: border-box;
+}

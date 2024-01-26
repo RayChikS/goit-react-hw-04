@@ -5,6 +5,8 @@ import { SearchBar } from './SearchBar';
 import { Loader } from './Loader';
 import { ErrorMassage } from './ErrorMassage';
 import { ImageGallery } from './ImageGallery';
+import { LoadMore } from './LoadMore';
+import css from './App.module.css';
 
 export const App = () => {
   const [loading, setLoading] = useState(false);
@@ -20,6 +22,7 @@ export const App = () => {
       console.log(data);
       setImages(data);
     } catch (error) {
+      console.error(error);
       setError(true);
     } finally {
       setLoading(false);
@@ -27,12 +30,13 @@ export const App = () => {
   };
 
   return (
-    <>
+    <div>
       <SearchBar onSearch={handleSearch} />
       {loading && <Loader />}
       {error && <ErrorMassage />}
       {images.length > 0 && <ImageGallery items={images} />}
       <ImageModal />
-    </>
+      <LoadMore />
+    </div>
   );
 };

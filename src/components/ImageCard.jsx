@@ -1,8 +1,13 @@
+import css from './ImageCard.module.css';
+
 export const ImageCard = ({ item }) => {
-  console.log(item);
   return (
-    <div className="photo-card">
-      <img src={item.urls.small} alt="" />
+    <div className={css.photoCard}>
+      <img
+        className={css.photo}
+        src={item.urls.small}
+        alt={item.alt_description}
+      />
     </div>
   );
 };
