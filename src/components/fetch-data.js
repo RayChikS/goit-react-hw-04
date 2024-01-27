@@ -8,10 +8,10 @@ axios.defaults.headers.common[
   'Authorization'
 ] = `Client-ID ${unsplashAccessKey}`;
 
-export const fetchData = async (topic, page, perPage) => {
+export const fetchData = async (topic, page) => {
   try {
     const response = await axios.get(
-      `/search/photos?query=${topic}&per_page=${perPage}&page=${page}`
+      `/search/photos?page=${page}&query=${topic}&per_page=${20}`
     );
     return response.data;
   } catch (error) {

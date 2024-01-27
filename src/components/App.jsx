@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchData } from './fetch-data';
 import { SearchBar } from './SearchBar';
 import { Loader } from './Loader';
@@ -12,21 +12,32 @@ export const App = () => {
   const [images, setImages] = useState([]);
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-  const [totalPages, setTotalPages] = useState(0);
-  const [loadedImages, setLoadedImages] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
+  const [topic, setTopic] = useState('');
+  const [warning, setWarning] = useState('');
 
-  const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
-  };
-
-  const handleSearch = async topic => {
+  const handleSearch = async () => {
     try {
+      if (!topic.trim()) {
+        setWarning('Please enter a valid search term');
+        return;
+      }
+
       setLoading(true);
-      const data = await fetchData(topic, page, perPage);
-      setImages(prevImages => [...prevImages, ...data.results]);
-      setTotalPages(Math.ceil(data.total / perPage));
-      setLoadedImages(prev => prev + data.results.length);
+      const data = await fetchData(topic, page);
+      if (data.results.length === 0) {
+        setWarning('No results found. Please try another search term.');
+        return;
+      }
+
+      setWarning('');
+      if (page === 1) {
+        setImages(data.results);
+      } else {
+        setImages(prevImages => [...prevImages, ...data.results]);
+      }
+      setTotalPage(data.total_pages);
+      console.log(data);
     } catch (error) {
       console.error(error);
       setError(true);
@@ -36,20 +47,32 @@ export const App = () => {
   };
 
   useEffect(() => {
-    handleSearch();
-  }, [page]);
+    if (topic || page > 1) {
+      handleSearch();
+    }
+  }, [topic, page]); // Вызовется при изменении topic или page
+
+  const loadMore = () => {
+    setPage(prevPage => prevPage + 1);
+  };
+
+  const handleSearchInputChange = newTopic => {
+    setTopic(newTopic);
+    setPage(1); // Сбрасываем страницу на первую при изменении темы
+    setWarning(''); // Очищаем предупреждение при изменении запроса
+  };
 
   return (
     <div>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar onSearch={handleSearchInputChange} />
       {loading && <Loader />}
       {error && <ErrorMassage />}
+      {warning && <div className={css.warning}>{warning}</div>}
       {images.length > 0 && <ImageGallery items={images} />}
-      {loadedImages < totalPages * perPage && (
-        <div className={css.centered}>
-          <LoadMore onClick={handleLoadMore} />
-        </div>
-      )}
+
+      <div className={css.centered}>
+        {page < totalPage && <LoadMore onClick={loadMore} />}
+      </div>
     </div>
   );
 };

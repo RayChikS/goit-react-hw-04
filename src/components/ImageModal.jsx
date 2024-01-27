@@ -1,34 +1,46 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
+import css from './ImageModal.module.css';
+import { IoIosCloseCircle } from 'react-icons/io';
 
-export const ImageModal = () => {
-  let subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
+const customStyles = {
+  content: {
+    padding: '0',
+    background: 'unset',
+    overflow: 'unset',
+    border: 'none',
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
 
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-    subtitle.style.color = '#f00';
-  }
-
-  function closeModal() {
-    setIsOpen(false);
+export const ImageModal = ({ isOpen, image, onRequestClose }) => {
+  if (!image) {
+    return null;
   }
 
   return (
-    <div>
-      <button onClick={openModal}>Open Modal</button>
-      <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        contentLabel="Example Modal"
-      >
-        <h2 ref={_subtitle => (subtitle = _subtitle)}>Hello</h2>
-      </Modal>
-    </div>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      contentLabel="Image Modal"
+      overlayClassName={css.overlay}
+      style={customStyles}
+    >
+      <button className={css.closeButton} onClick={onRequestClose}>
+        <IoIosCloseCircle className={css.icon} />
+      </button>
+      <div className={css.modalContent}>
+        <img
+          src={image.urls.regular}
+          alt={image.alt_description}
+          className={css.image}
+        />
+      </div>
+    </Modal>
   );
 };
