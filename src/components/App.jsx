@@ -37,7 +37,6 @@ export const App = () => {
         setImages(prevImages => [...prevImages, ...data.results]);
       }
       setTotalPage(data.total_pages);
-      console.log(data);
     } catch (error) {
       console.error(error);
       setError(true);
